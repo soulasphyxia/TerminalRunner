@@ -1,16 +1,81 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] LifeManager lifeManager;
+    [SerializeField] ScoreManager scoreManager;
+    [SerializeField] Camera mainCamera;
+    [SerializeField] GameObject defaultExplosionPrefab;
+
+    private void Awake()
     {
-        
+        GameEvents.OnEnemyDestroyed += (enemy) => HandleEnemyDestroyed(enemy);
+        GameEvents.OnEnemyGetAway += HandleEnemyGotAway;
+        GameEvents.GameOver += HandleGameOver;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void HandleEnemyGotAway() {
+        lifeManager.LoseLife();
+    }
+
+    public void HandleEnemyDestroyed(GameObject explosionEffect)
     {
-        
+
+        DestroyNearestEnemyToCameraBottom(explosionEffect);
+        scoreManager.AddScore(100);
+    }
+
+    public void HandleGameOver()
+    {
+        SceneManager.LoadScene("DeathScene");
+    }
+
+    private void DestroyNearestEnemyToCameraBottom(GameObject explosionEffect)
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        if (enemies.Length == 0)
+        {
+            Debug.LogWarning("На сцене нет врагов!");
+            return;
+        }
+
+        Vector3 cameraBottomPosition = mainCamera.ViewportToWorldPoint(new Vector3(0.5f, 0, mainCamera.nearClipPlane));
+
+        GameObject nearestEnemy = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (GameObject enemy in enemies)
+        {
+            float distance = Mathf.Abs(enemy.transform.position.y - cameraBottomPosition.y);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestEnemy = enemy;
+            }
+        }
+
+        if (nearestEnemy != null)
+        {
+            Vector2 enemyPosition = nearestEnemy.transform.position;
+
+            Destroy(nearestEnemy.gameObject);
+
+            if (explosionEffect != null)
+            {
+                Instantiate(explosionEffect, (Vector3)enemyPosition, Quaternion.identity);
+            }
+            else if (defaultExplosionPrefab != null)
+            {
+                Instantiate(defaultExplosionPrefab, (Vector3)enemyPosition, Quaternion.identity);
+            }
+            Debug.Log("Уничтожен ближайший враг к нижней границе камеры.");
+        }
+        else
+        {
+            Debug.LogWarning("Не удалось найти ближайшего врага!");
+        }
     }
 }
