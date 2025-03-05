@@ -4,8 +4,6 @@ public class EnemyDestroyer : MonoBehaviour
 {
     private Camera mainCamera;
 
-    public event System.Action OnEnemyDestroyed;
-
     private void Start()
     {
         mainCamera = Camera.main;

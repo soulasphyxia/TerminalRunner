@@ -1,13 +1,5 @@
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.ConstrainedExecution;
-using Mono.Cecil.Cil;
 using TMPro;
-using TMPro.Examples;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Debug = UnityEngine.Debug;
 
 public class TextHandlerManager : MonoBehaviour
 {   
@@ -15,12 +7,11 @@ public class TextHandlerManager : MonoBehaviour
 
     private Command currentCommand;
 
-    ICommandGenerator commandGenerator;
+    private ICommandGenerator commandGenerator;
 
-    private int errors = 0;
 
     private void Awake()
-    {
+    { 
         commandGenerator = new EasyModeCommandGenerator();   
         currentCommand = commandGenerator.GenerateCommand();
         DisplayText();
@@ -38,7 +29,6 @@ public class TextHandlerManager : MonoBehaviour
             {
                 if (currentWord.IsCompleted)
                 {
-                    errors++;
                     currentWord.AddChar(c);
                 } 
                 else
@@ -49,7 +39,6 @@ public class TextHandlerManager : MonoBehaviour
                     }
                     else
                     {
-                        errors++;
                         currentWord.SetCurrentCharIncorrectColor();
                     }
                 }
@@ -86,7 +75,7 @@ public class TextHandlerManager : MonoBehaviour
         }
         if (currentCommand.IsCorrect)
         {
-            GameEvents.CallOnEnemyDestroyed();
+            GameEvents.CallOnEnemyDestroyed(currentCommand.DeathAnimation);
             DisplayNewCommand();   
         }
     }

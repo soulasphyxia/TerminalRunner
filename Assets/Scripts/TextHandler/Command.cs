@@ -11,6 +11,7 @@ public class Command
 
     private readonly List<CommandWord> words;
     private int currentWordPosition = 0;
+    private GameObject deathAnimation;
 
     public Command(List<CommandWord> words)
     {
@@ -20,6 +21,12 @@ public class Command
     public List<CommandWord> Words
     {
         get { return  this.words; }
+    }
+
+    public GameObject DeathAnimation
+    {
+        get { return this.deathAnimation; }
+        set { this.deathAnimation = value; }
     }
 
     public CommandWord CurrentWord

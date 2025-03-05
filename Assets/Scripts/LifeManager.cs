@@ -28,7 +28,7 @@ public class LifeManager : MonoBehaviour
                 continue;
             }
 
-            float xPosition = i * (lives[i].rectTransform.rect.width + 5);
+            float xPosition = i * (lives[i].rectTransform.rect.width + 15);
             lives[i].rectTransform.anchoredPosition = new Vector2(xPosition, 0);
         }
     }
@@ -46,7 +46,7 @@ public class LifeManager : MonoBehaviour
 
         if (currentLives == 0)
         {
-            Debug.Log("Game Over!");
+            GameEvents.CallGameOver();
         }
     }
 }
