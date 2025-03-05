@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] ScoreManager scoreManager;
     [SerializeField] Camera mainCamera;
     [SerializeField] GameObject defaultExplosionPrefab;
+
+    private DatabaseManager _dbManager;
+    private CommandsRepository _commandsRepo;
 
     private void Awake()
     {
@@ -37,7 +41,7 @@ public class GameManager : MonoBehaviour
 
         if (enemies.Length == 0)
         {
-            Debug.LogWarning("На сцене нет врагов!");
+            Debug.LogWarning("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");
             return;
         }
 
@@ -71,11 +75,11 @@ public class GameManager : MonoBehaviour
             {
                 Instantiate(defaultExplosionPrefab, (Vector3)enemyPosition, Quaternion.identity);
             }
-            Debug.Log("Уничтожен ближайший враг к нижней границе камеры.");
+            Debug.Log("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
         }
         else
         {
-            Debug.LogWarning("Не удалось найти ближайшего врага!");
+            Debug.LogWarning("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!");
         }
     }
 }

@@ -7,14 +7,13 @@ public class TextHandlerManager : MonoBehaviour
 
     private Command currentCommand;
 
-    private ICommandGenerator commandGenerator;
+    [SerializeField] private EasyModeCommandGenerator commandGenerator;
 
 
-    private void Awake()
+    public void Awake()
     { 
-        commandGenerator = new EasyModeCommandGenerator();   
-        currentCommand = commandGenerator.GenerateCommand();
-        DisplayText();
+        // commandGenerator = GetComponent<EasyModeCommandGenerator>();   
+        DisplayNewCommand();
     }
 
     void Update()

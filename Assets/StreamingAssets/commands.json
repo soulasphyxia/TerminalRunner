@@ -1,0 +1,44 @@
+[
+    {
+        "Name": "mkdir dirName",
+        "Description": "Создайте директорию с названием \"dirName\"",
+        "Difficulty": 0,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "cd dirName",
+        "Description": "Перейти в директорию dirName",
+        "Difficulty": 0,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "clear",
+        "Description": "Команда для очистки окна терминала от сообщений",
+        "Difficulty": 0,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "date",
+        "Description": "Команда для вывода текущего времени и даты",
+        "Difficulty": 0,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "kill 123",
+        "Description": "Завершить принудительно процесс с PID=\"26086\" ",
+        "Difficulty": 0,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "top",
+        "Description": "Команда для отображения запущенных процессов",
+        "Difficulty": 0,
+        "Animation": "",
+        "isUsersMade": false
+    }
+]
