@@ -9,9 +9,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] Camera mainCamera;
     [SerializeField] GameObject defaultExplosionPrefab;
 
-    private DatabaseManager _dbManager;
-    private CommandsRepository _commandsRepo;
-
     private void Awake()
     {
         GameEvents.OnEnemyDestroyed += (enemy) => HandleEnemyDestroyed(enemy);

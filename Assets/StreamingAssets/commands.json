@@ -1,43 +1,127 @@
 [
     {
-        "Name": "mkdir dirName",
-        "Description": "Создайте директорию с названием \"dirName\"",
+        "Name": "ls -l",
+        "Description": "Вывести список файлов и директорий в детальном формате",
         "Difficulty": 0,
         "Animation": "",
         "isUsersMade": false
     },
     {
-        "Name": "cd dirName",
-        "Description": "Перейти в директорию dirName",
+        "Name": "pwd",
+        "Description": "Показать текущий каталог",
         "Difficulty": 0,
         "Animation": "",
         "isUsersMade": false
     },
     {
-        "Name": "clear",
-        "Description": "Команда для очистки окна терминала от сообщений",
+        "Name": "touch file.txt",
+        "Description": "Создать пустой файл с именем file.txt",
         "Difficulty": 0,
         "Animation": "",
         "isUsersMade": false
     },
     {
-        "Name": "date",
-        "Description": "Команда для вывода текущего времени и даты",
+        "Name": "rm file.txt",
+        "Description": "Удалить файл file.txt",
         "Difficulty": 0,
         "Animation": "",
         "isUsersMade": false
     },
     {
-        "Name": "kill 123",
-        "Description": "Завершить принудительно процесс с PID=\"26086\" ",
+        "Name": "cp file1.txt file2.txt",
+        "Description": "Скопировать файл file1.txt в file2.txt",
+        "Difficulty": 1,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "mv file.txt /home/user/",
+        "Description": "Переместить файл в каталог /home/user/",
+        "Difficulty": 1,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "chmod 755 script.sh",
+        "Description": "Назначить права доступа 755 для script.sh",
+        "Difficulty": 1,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "sudo apt update && sudo apt upgrade",
+        "Description": "Обновить список пакетов и выполнить обновление системы",
+        "Difficulty": 2,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "tar -czvf archive.tar.gz dir/",
+        "Description": "Создать архив tar.gz из каталога dir/",
+        "Difficulty": 2,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "find /home -name '*.txt'",
+        "Description": "Найти все файлы с расширением .txt в каталоге /home",
+        "Difficulty": 2,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "cat file.txt",
+        "Description": "Вывести содержимое файла file.txt",
         "Difficulty": 0,
         "Animation": "",
         "isUsersMade": false
     },
     {
-        "Name": "top",
-        "Description": "Команда для отображения запущенных процессов",
+        "Name": "grep 'pattern' file.txt",
+        "Description": "Найти строку с 'pattern' в файле file.txt",
+        "Difficulty": 1,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "df -h",
+        "Description": "Показать использование дискового пространства в удобочитаемом формате",
         "Difficulty": 0,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "du -sh folder/",
+        "Description": "Показать размер каталога folder/",
+        "Difficulty": 1,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "ps aux",
+        "Description": "Вывести список запущенных процессов",
+        "Difficulty": 0,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "netstat -tulnp",
+        "Description": "Показать список открытых портов и процессов, которые их используют",
+        "Difficulty": 2,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "wget https://example.com/file.zip",
+        "Description": "Скачать файл по URL https://example.com/file.zip",
+        "Difficulty": 2,
+        "Animation": "",
+        "isUsersMade": false
+    },
+    {
+        "Name": "scp user@remote:/path/to/file .",
+        "Description": "Скопировать файл с удаленного сервера на локальную машину",
+        "Difficulty": 2,
         "Animation": "",
         "isUsersMade": false
     }

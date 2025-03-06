@@ -5,10 +5,10 @@ using System.IO;
 
 public class EasyModeCommandGenerator : MonoBehaviour, ICommandGenerator
 {
-    private DatabaseManager _dbManager;
     [SerializeField] private CommandsRepository _commandsRepo;
+    private DatabaseManager _dbManager;
 
-    private List<string> _commands = new List<string>(){"NadoIspravit"};
+    private List<string> _commands = new List<string>(){"htop"};
 
     // public void Awake()
     // {
@@ -20,13 +20,11 @@ public class EasyModeCommandGenerator : MonoBehaviour, ICommandGenerator
         Debug.Log("Запуск GenerateCommand()");
         getCommandsFromDB();
         return GetCommand(_commands[Random.Range(0, _commands.Count)]);
-       //return GetCommand(_commands[0]);
     }
 
     private async void getCommandsFromDB()
-    {
-
-        var commands = await _commandsRepo.GetAllCommandsAsync();
+    {   
+        var commands = await _commandsRepo.GetCommandsAsync(new int[] {0, 1, 2});
         foreach (var command in commands)
         {
             _commands.Add(command.Name);

@@ -4,7 +4,7 @@ public class CommandsTable
 {
 
     [PrimaryKey, AutoIncrement]
-    public int ID { get; set; }
+    public ulong ID { get; set; }
     [NotNull, Unique]
     public string Name { get; set; }
     [NotNull]
