@@ -1,3 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using NUnit.Framework;
+using NUnit.Framework.Internal.Filters;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,12 +12,85 @@ public class GameManager : MonoBehaviour
     [SerializeField] ScoreManager scoreManager;
     [SerializeField] Camera mainCamera;
     [SerializeField] GameObject defaultExplosionPrefab;
+    [SerializeField] private TextHandlerManager textHandlerManager;
+    [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private GameObject[] stages;
+    private Queue<IStageable> stagesQueue;
+
+    private IStageable currentStage;
+    private int currentStageIndex;
+
+    private AudioSource[] audioSources;
+    private bool IsEndlessMode = false;
+
+    private int enemiesKilled = 0;
+
 
     private void Awake()
     {
         GameEvents.OnEnemyDestroyed += (enemy) => HandleEnemyDestroyed(enemy);
         GameEvents.OnEnemyGetAway += HandleEnemyGotAway;
         GameEvents.GameOver += HandleGameOver;
+        audioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
+        currentStage = stages[0].GetComponent<IStageable>();
+        currentStageIndex = 0;
+    }
+
+    public void Update()
+    {
+        ChangeState();
+    }
+
+
+    private void ChangeState()
+    {
+        if (enemiesKilled == currentStage.EnemiesToKill() && !IsEndlessMode)
+        {
+            currentStage = stages[currentStageIndex].GetComponent<IStageable>();
+            Debug.Log($"{currentStage.GetStageNumber()}, {currentStage.IsLastStage()}");
+            GameEvents.CallChangeStage(currentStage);
+            enemiesKilled = 0;
+            currentStageIndex++;
+        }
+        if (currentStage.IsLastStage())
+        {
+            IsEndlessMode = true;
+        }
+    }
+
+    public void StartGame()
+    {
+        textHandlerManager.gameObject.SetActive(true);
+        textHandlerManager.OnDisplayText();
+        enemySpawner.gameObject.SetActive(true);
+        enemySpawner.CanSpawn = true;
+        foreach (AudioSource source in audioSources)
+        {
+            if (source != null)
+            {
+                source.Play();
+            }
+        }
+    }
+
+    public void StopGame()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            Destroy(enemy);
+        }
+        textHandlerManager.gameObject.SetActive(false);
+        enemySpawner.gameObject.SetActive(false);
+        textHandlerManager.OffDisplayText();
+        enemySpawner.CanSpawn = false;
+        foreach (AudioSource source in audioSources)
+        {
+            if (source != null)
+            {
+                source.Stop();
+            }
+        }
     }
 
     public void HandleEnemyGotAway() {
@@ -21,13 +99,14 @@ public class GameManager : MonoBehaviour
 
     public void HandleEnemyDestroyed(GameObject explosionEffect)
     {
-
         DestroyNearestEnemyToCameraBottom(explosionEffect);
         scoreManager.AddScore(100);
+        enemiesKilled++;
     }
 
     public void HandleGameOver()
     {
+        StopGame();
         SceneManager.LoadScene("DeathScene");
     }
 
@@ -63,15 +142,20 @@ public class GameManager : MonoBehaviour
 
             Destroy(nearestEnemy.gameObject);
 
+            GameObject explosion = null;
+
             if (explosionEffect != null)
             {
-                Instantiate(explosionEffect, (Vector3)enemyPosition, Quaternion.identity);
+                explosion = Instantiate(explosionEffect, (Vector3)enemyPosition, Quaternion.identity);
             }
             else if (defaultExplosionPrefab != null)
             {
-                Instantiate(defaultExplosionPrefab, (Vector3)enemyPosition, Quaternion.identity);
+                explosion = Instantiate(defaultExplosionPrefab, (Vector3)enemyPosition, Quaternion.identity);
             }
             Debug.Log("”ничтожен ближайший враг к нижней границе камеры.");
+            if (explosion != null) {
+                Destroy(explosion, 1f);
+            }
         }
         else
         {

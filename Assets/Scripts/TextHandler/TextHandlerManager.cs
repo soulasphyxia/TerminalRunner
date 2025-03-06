@@ -9,9 +9,21 @@ public class TextHandlerManager : MonoBehaviour
 
     private ICommandGenerator commandGenerator;
 
+    public void OnDisplayText()
+    {
+        displayText.gameObject.SetActive (true);
+    }
+
+    public void OffDisplayText()
+    {
+        displayText.gameObject.SetActive(false);
+    }
 
     private void Awake()
-    { 
+    {
+        GameEvents.OnChangeStage += (stage) => HandleStageChanged(stage);
+        this.gameObject.SetActive(false);
+        OffDisplayText();
         commandGenerator = new EasyModeCommandGenerator();   
         currentCommand = commandGenerator.GenerateCommand();
         DisplayText();
@@ -89,5 +101,33 @@ public class TextHandlerManager : MonoBehaviour
     private void DisplayText()
     {
         displayText.text = currentCommand.ToString();
+    }
+
+    private void OnDisable()
+    {
+        displayText.gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        displayText.gameObject.SetActive(true);
+    }
+
+    private void HandleStageChanged(IStageable stage)
+    {
+        StartCoroutine(DisableComponentCoroutine(3.5f));
+    }
+
+    private System.Collections.IEnumerator DisableComponentCoroutine(float seconds)
+    {
+        // Отключаем компонент
+        this.enabled = false;
+        
+
+        // Ждем указанное количество секунд
+        yield return new WaitForSeconds(seconds);
+
+        // Включаем компонент обратно
+        this.enabled = true;
     }
 }

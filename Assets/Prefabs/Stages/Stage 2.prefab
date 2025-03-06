@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7779285529676149379}
   - component: {fileID: 889168652743882544}
+  - component: {fileID: -3497609281491300274}
   m_Layer: 0
-  m_Name: Background
-  m_TagString: Untagged
+  m_Name: Stage 2
+  m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,3 +88,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-3497609281491300274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558944213688662039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b967defd42aaf4b89323538423c07f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _number: 2
+  _spawnRate: 2
+  _speed: 3
+  _sprite: {fileID: 21300000, guid: db722de89376d2141b2985ba51d9fef3, type: 3}
+  _diffs: 0000000001000000
+  _isLastStage: 0
+  _enemiesToKill: 1
