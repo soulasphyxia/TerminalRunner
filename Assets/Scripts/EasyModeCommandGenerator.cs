@@ -5,7 +5,23 @@ using UnityEngine;
 public class EasyModeCommandGenerator : ICommandGenerator
 {
 
-    private List<string> _commands = new List<string>() { "git pull origin main", "ls -l", "cd . ." };
+    private List<string> _commands = new List<string>()
+{
+    "ls -l",
+    "pwd",
+    "touch file.txt",
+    "rm file.txt",
+    "cp file1.txt file2.txt",
+    "mv file.txt /home/user/",
+    "chmod 755 script.sh",
+    "find /home -name '*.txt'",
+    "cat file.txt",
+    "grep 'pattern' file.txt",
+    "df -h",
+    "du -sh folder/",
+    "ps aux",
+    "netstat -tulnp"
+};
 
     public Command GenerateCommand()
     {
