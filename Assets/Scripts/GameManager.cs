@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+п»їusing System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
@@ -106,6 +106,7 @@ public class GameManager : MonoBehaviour
 
     public void HandleGameOver()
     {
+        ScoreTransitioner.LastScore = scoreManager.currentScore; // РЎРѕС…СЂР°РЅСЏРµРј РѕС‡РєРё
         StopGame();
         SceneManager.LoadScene("DeathScene");
     }
@@ -116,7 +117,7 @@ public class GameManager : MonoBehaviour
 
         if (enemies.Length == 0)
         {
-            Debug.LogWarning("На сцене нет врагов!");
+            Debug.LogWarning("ГЌГ  Г±Г¶ГҐГ­ГҐ Г­ГҐГІ ГўГ°Г ГЈГ®Гў!");
             return;
         }
 
@@ -152,14 +153,14 @@ public class GameManager : MonoBehaviour
             {
                 explosion = Instantiate(defaultExplosionPrefab, (Vector3)enemyPosition, Quaternion.identity);
             }
-            Debug.Log("Уничтожен ближайший враг к нижней границе камеры.");
+            Debug.Log("Г“Г­ГЁГ·ГІГ®Г¦ГҐГ­ ГЎГ«ГЁГ¦Г Г©ГёГЁГ© ГўГ°Г ГЈ ГЄ Г­ГЁГ¦Г­ГҐГ© ГЈГ°Г Г­ГЁГ¶ГҐ ГЄГ Г¬ГҐГ°Г».");
             if (explosion != null) {
                 Destroy(explosion, 1f);
             }
         }
         else
         {
-            Debug.LogWarning("Не удалось найти ближайшего врага!");
+            Debug.LogWarning("ГЌГҐ ГіГ¤Г Г«Г®Г±Гј Г­Г Г©ГІГЁ ГЎГ«ГЁГ¦Г Г©ГёГҐГЈГ® ГўГ°Г ГЈГ !");
         }
     }
 }

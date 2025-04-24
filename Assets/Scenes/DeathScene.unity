@@ -333,7 +333,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0422\u0435\u043A\u0443\u0449\u0438\u0439 \u0441\u0447\u0435\u0442:"
+  m_text: "\u0418\u0442\u043E\u0433\u043E\u0432\u044B\u0439 \u0441\u0447\u0435\u0442:
+    0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a58e9b0aa17b3f04095e13db4bcc5e23, type: 2}
   m_sharedMaterial: {fileID: 3984569175419237700, guid: a58e9b0aa17b3f04095e13db4bcc5e23, type: 2}
@@ -987,6 +988,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1969135428}
+  - component: {fileID: 1969135430}
   - component: {fileID: 1969135427}
   - component: {fileID: 1969135426}
   - component: {fileID: 1969135425}
@@ -1183,6 +1185,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1969135430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969135424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6264cece081bb9946893a9fbaa18d84b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 538866258}
 --- !u!1 &1979505532
 GameObject:
   m_ObjectHideFlags: 0
