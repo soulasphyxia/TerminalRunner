@@ -9,7 +9,6 @@ public class StageManager : MonoBehaviour
     [SerializeField] TMP_Text text;
     [SerializeField] private Image fadePanel;
     private bool isFading = false;
-    int currentStage;
 
     public void Awake()
     {
@@ -21,14 +20,12 @@ public class StageManager : MonoBehaviour
 
         backgroundRenderer = GameObject.FindGameObjectWithTag("Background").GetComponent<SpriteRenderer>();
 
-        // Устанавливаем начальную прозрачность панели затемнения
         if (fadePanel != null)
         {
-            fadePanel.color = new Color(0, 0, 0, 0); // Полностью прозрачный
+            fadePanel.color = new Color(0, 0, 0, 0);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -50,39 +47,33 @@ public class StageManager : MonoBehaviour
 
     public void TransitionToStage(IStageable stage)
     {
-        if (isFading) return; // Если уже идет процесс затемнения, не запускаем новый
+        if (isFading) return;
         spawner.CanSpawn = false;
         spawner.EnemiesSpeed += 1f;
         spawner.CanSpawn = true;
         StartCoroutine(FadeAndChangeStage(stage));
     }
 
-    // Корутина для затемнения, смены фона и возвращения к нормальной видимости
     private System.Collections.IEnumerator FadeAndChangeStage(IStageable stage)
     {
         isFading = true;
+        StartCoroutine(FadeScreen(1f));
+        yield return StartCoroutine(FadeText(1f));
 
-        // 1. Затемняем экран и показываем текст одновременно
-        StartCoroutine(FadeScreen(1f)); // Затемнение экрана
-        yield return StartCoroutine(FadeText(1f)); // Показ текста (ожидаем его завершения)
-
-        // 2. Добавляем задержку перед сменой фона
-        yield return new WaitForSeconds(1f); // Задержка в 1 секунду
+        yield return new WaitForSeconds(1f); 
 
        backgroundRenderer.sprite = stage.GetBackground();
 
-        // 4. Убираем текст и осветляем экран одновременно
-        StartCoroutine(FadeScreen(0f)); // Осветление экрана
-        yield return StartCoroutine(FadeText(0f)); // Скрытие текста (ожидаем его завершения)
+        StartCoroutine(FadeScreen(0f)); 
+        yield return StartCoroutine(FadeText(0f));
 
         isFading = false;
     }
 
-    // Корутина для плавного изменения прозрачности
     private System.Collections.IEnumerator FadeScreen(float targetAlpha)
     {
         float currentAlpha = fadePanel.color.a;
-        float duration = 1f; // Длительность затемнения/осветления
+        float duration = 1f;
         float timeElapsed = 0f;
 
         while (timeElapsed < duration)
@@ -93,14 +84,13 @@ public class StageManager : MonoBehaviour
             yield return null;
         }
 
-        // Устанавливаем конечное значение альфа
         fadePanel.color = new Color(0, 0, 0, targetAlpha);
     }
 
     private System.Collections.IEnumerator FadeText(float targetAlpha)
     {
         float currentAlpha = text.color.a;
-        float duration = 0.5f; // Длительность появления/исчезновения текста
+        float duration = 0.5f;
         float timeElapsed = 0f;
 
         while (timeElapsed < duration)
@@ -111,7 +101,6 @@ public class StageManager : MonoBehaviour
             yield return null;
         }
 
-        // Устанавливаем конечное значение альфа
         text.color = new Color(text.color.r, text.color.g, text.color.b, targetAlpha);
     }
 

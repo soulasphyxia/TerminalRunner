@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using NUnit.Framework;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TextHandlerManager : MonoBehaviour
@@ -7,7 +10,11 @@ public class TextHandlerManager : MonoBehaviour
 
     private Command currentCommand;
 
-    private ICommandGenerator commandGenerator;
+    [SerializeField] private EasyModeCommandGenerator commandGenerator;
+
+    private Stage currentStage;
+
+    private int[] currentDifficulties = new int[] { 0, 1 };
 
     public void OnDisplayText()
     {
@@ -19,12 +26,10 @@ public class TextHandlerManager : MonoBehaviour
         displayText.gameObject.SetActive(false);
     }
 
-    private void Awake()
+    private void Start()
     {
-        GameEvents.OnChangeStage += (stage) => HandleStageChanged(stage);
         this.gameObject.SetActive(false);
         OffDisplayText();
-        commandGenerator = new EasyModeCommandGenerator();   
         currentCommand = commandGenerator.GenerateCommand();
         DisplayText();
     }
@@ -48,10 +53,12 @@ public class TextHandlerManager : MonoBehaviour
                     if (c == currentChar.Character)
                     {
                         currentWord.SetCurrentCharCorrectColor();
+                        GameEvents.CallAddCombo();
                     }
                     else
                     {
                         currentWord.SetCurrentCharIncorrectColor();
+                        GameEvents.CallResetCombo();
                     }
                 }
                 currentWord.Next();
@@ -105,29 +112,29 @@ public class TextHandlerManager : MonoBehaviour
 
     private void OnDisable()
     {
+        GameEvents.OnChangeStage -= (stage) => HandleStageChanged(stage);
         displayText.gameObject.SetActive(false);
     }
 
     private void OnEnable()
     {
+        GameEvents.OnChangeStage += (stage) => HandleStageChanged(stage);
         displayText.gameObject.SetActive(true);
     }
 
     private void HandleStageChanged(IStageable stage)
     {
         StartCoroutine(DisableComponentCoroutine(3.5f));
+        this.currentDifficulties = stage.GetDifficulties();
+
     }
 
     private System.Collections.IEnumerator DisableComponentCoroutine(float seconds)
     {
-        // Отключаем компонент
         this.enabled = false;
         
-
-        // Ждем указанное количество секунд
         yield return new WaitForSeconds(seconds);
 
-        // Включаем компонент обратно
         this.enabled = true;
     }
 }
