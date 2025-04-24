@@ -1,8 +1,5 @@
-п»їusing System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using NUnit.Framework;
-using NUnit.Framework.Internal.Filters;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,7 +12,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextHandlerManager textHandlerManager;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private GameObject[] stages;
-    private Queue<IStageable> stagesQueue;
+
+    public TMP_Text comboText;
 
     private IStageable currentStage;
     private int currentStageIndex;
@@ -25,12 +23,17 @@ public class GameManager : MonoBehaviour
 
     private int enemiesKilled = 0;
 
+    private int currentCombo = 1;
+
 
     private void Awake()
     {
-        GameEvents.OnEnemyDestroyed += (enemy) => HandleEnemyDestroyed(enemy);
+        DontDestroyOnLoad(mainCamera);
+        GameEvents.OnEnemyDestroyed += HandleEnemyDestroyed;
         GameEvents.OnEnemyGetAway += HandleEnemyGotAway;
         GameEvents.GameOver += HandleGameOver;
+        GameEvents.AddCombo += HandleAddCombo;
+        GameEvents.ResetCombo += HandleResetCombo;
         audioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
         currentStage = stages[0].GetComponent<IStageable>();
         currentStageIndex = 0;
@@ -73,51 +76,49 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StopGame()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemy in enemies)
-        {
-            Destroy(enemy);
-        }
-        textHandlerManager.gameObject.SetActive(false);
-        enemySpawner.gameObject.SetActive(false);
-        textHandlerManager.OffDisplayText();
-        enemySpawner.CanSpawn = false;
-        foreach (AudioSource source in audioSources)
-        {
-            if (source != null)
-            {
-                source.Stop();
-            }
-        }
-    }
-
     public void HandleEnemyGotAway() {
         lifeManager.LoseLife();
     }
 
-    public void HandleEnemyDestroyed(GameObject explosionEffect)
+    public void HandleEnemyDestroyed()
     {
-        DestroyNearestEnemyToCameraBottom(explosionEffect);
-        scoreManager.AddScore(100);
+        DestroyNearestEnemyToCameraBottom();
+        scoreManager.AddScore(100 * currentCombo);
         enemiesKilled++;
+    }
+
+    public void HandleAddCombo()
+    {
+        currentCombo += 1;
+        UpdateComboText();
+    }
+
+    public void HandleResetCombo()
+    {
+        currentCombo = 1;
+        UpdateComboText();
     }
 
     public void HandleGameOver()
     {
-        ScoreTransitioner.LastScore = scoreManager.currentScore; // РЎРѕС…СЂР°РЅСЏРµРј РѕС‡РєРё
-        StopGame();
         SceneManager.LoadScene("DeathScene");
     }
 
-    private void DestroyNearestEnemyToCameraBottom(GameObject explosionEffect)
+    private void UpdateComboText()
+    {
+        if (comboText != null)
+        {
+            comboText.text = currentCombo.ToString() + "x";
+        }
+    }
+
+    private void DestroyNearestEnemyToCameraBottom()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
         if (enemies.Length == 0)
         {
-            Debug.LogWarning("ГЌГ  Г±Г¶ГҐГ­ГҐ Г­ГҐГІ ГўГ°Г ГЈГ®Гў!");
+            Debug.LogWarning("На сцене нет врагов!");
             return;
         }
 
@@ -144,23 +145,16 @@ public class GameManager : MonoBehaviour
             Destroy(nearestEnemy.gameObject);
 
             GameObject explosion = null;
-
-            if (explosionEffect != null)
-            {
-                explosion = Instantiate(explosionEffect, (Vector3)enemyPosition, Quaternion.identity);
-            }
-            else if (defaultExplosionPrefab != null)
-            {
-                explosion = Instantiate(defaultExplosionPrefab, (Vector3)enemyPosition, Quaternion.identity);
-            }
-            Debug.Log("Г“Г­ГЁГ·ГІГ®Г¦ГҐГ­ ГЎГ«ГЁГ¦Г Г©ГёГЁГ© ГўГ°Г ГЈ ГЄ Г­ГЁГ¦Г­ГҐГ© ГЈГ°Г Г­ГЁГ¶ГҐ ГЄГ Г¬ГҐГ°Г».");
+            explosion = Instantiate(defaultExplosionPrefab, (Vector3)enemyPosition, Quaternion.identity);
+            
+            Debug.Log("Уничтожен ближайший враг к нижней границе камеры.");
             if (explosion != null) {
                 Destroy(explosion, 1f);
             }
         }
         else
         {
-            Debug.LogWarning("ГЌГҐ ГіГ¤Г Г«Г®Г±Гј Г­Г Г©ГІГЁ ГЎГ«ГЁГ¦Г Г©ГёГҐГЈГ® ГўГ°Г ГЈГ !");
+            Debug.LogWarning("Не удалось найти ближайшего врага!");
         }
     }
 }

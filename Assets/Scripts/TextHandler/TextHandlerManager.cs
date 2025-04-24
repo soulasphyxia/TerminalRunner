@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using NUnit.Framework;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TextHandlerManager : MonoBehaviour
@@ -7,7 +10,7 @@ public class TextHandlerManager : MonoBehaviour
 
     private Command currentCommand;
 
-    private ICommandGenerator commandGenerator;
+    [SerializeField] private EasyModeCommandGenerator commandGenerator;
 
     public void OnDisplayText()
     {
@@ -21,10 +24,13 @@ public class TextHandlerManager : MonoBehaviour
 
     private void Awake()
     {
-        GameEvents.OnChangeStage += (stage) => HandleStageChanged(stage);
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
         this.gameObject.SetActive(false);
         OffDisplayText();
-        commandGenerator = new EasyModeCommandGenerator();   
         currentCommand = commandGenerator.GenerateCommand();
         DisplayText();
     }
@@ -48,10 +54,12 @@ public class TextHandlerManager : MonoBehaviour
                     if (c == currentChar.Character)
                     {
                         currentWord.SetCurrentCharCorrectColor();
+                        GameEvents.CallAddCombo();
                     }
                     else
                     {
                         currentWord.SetCurrentCharIncorrectColor();
+                        GameEvents.CallResetCombo();
                     }
                 }
                 currentWord.Next();
@@ -87,7 +95,7 @@ public class TextHandlerManager : MonoBehaviour
         }
         if (currentCommand.IsCorrect)
         {
-            GameEvents.CallOnEnemyDestroyed(currentCommand.DeathAnimation);
+            GameEvents.CallOnEnemyDestroyed();
             DisplayNewCommand();   
         }
     }
@@ -105,12 +113,14 @@ public class TextHandlerManager : MonoBehaviour
 
     private void OnDisable()
     {
-        displayText.gameObject.SetActive(false);
+        GameEvents.OnChangeStage -= (stage) => HandleStageChanged(stage);
+        //displayText.gameObject.SetActive(false);
     }
 
     private void OnEnable()
     {
-        displayText.gameObject.SetActive(true);
+        GameEvents.OnChangeStage += (stage) => HandleStageChanged(stage);
+        //displayText.gameObject.SetActive(true);
     }
 
     private void HandleStageChanged(IStageable stage)
@@ -120,14 +130,10 @@ public class TextHandlerManager : MonoBehaviour
 
     private System.Collections.IEnumerator DisableComponentCoroutine(float seconds)
     {
-        // Отключаем компонент
         this.enabled = false;
         
-
-        // Ждем указанное количество секунд
         yield return new WaitForSeconds(seconds);
 
-        // Включаем компонент обратно
         this.enabled = true;
     }
 }

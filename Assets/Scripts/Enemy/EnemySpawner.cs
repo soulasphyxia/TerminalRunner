@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    private float spawnRate = 3f;
+    private float spawnRate = 2f;
     [SerializeField] private GameObject[] enemyPrefabs;
     [SerializeField] private bool canSpawn = false;
     private float enemiesSpeed = 0.5f;
@@ -13,7 +13,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] Transform container;
 
     private Camera mainCamera;
-    private int lastSpawnedEnemyIndex = -1; // Индекс последнего созданного врага
+    private int lastSpawnedEnemyIndex = -1;
 
 
     public float SpawnRate
@@ -48,6 +48,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void Awake()
     {
+        DontDestroyOnLoad(container);
         GameEvents.OnChangeStage += (stage) => HandleStageChanged(stage);
         this.gameObject.SetActive(false);
     }
@@ -56,12 +57,12 @@ public class EnemySpawner : MonoBehaviour
     {
         ClearAllEnemies();
         canSpawn = false;
-        container.gameObject.SetActive(false);
+        //container.gameObject.SetActive(false);
     }
 
     private void OnEnable()
     {
-        container.gameObject.SetActive(true);
+        //container.gameObject.SetActive(true);
         canSpawn = true;
         mainCamera = Camera.main;
         enemies.Clear();
@@ -91,23 +92,23 @@ public class EnemySpawner : MonoBehaviour
     private IEnumerator Spawner()
     {
         WaitForSeconds wait = new WaitForSeconds(spawnRate);
-
         while (canSpawn)
         {
+            SpawnEnemy();
             yield return wait;
-
-            // Выбираем случайного врага, отличного от предыдущего
-            int randomIndex = GetRandomEnemyIndex();
-            GameObject enemyToSpawn = enemyPrefabs[randomIndex];
-
-            // Рассчитываем случайную позицию по оси X в пределах экрана
-            Vector3 spawnPosition = GetRandomSpawnPosition();
-
-            // Создаем врага в рассчитанной позиции
-            GameObject enemy = Instantiate(enemyToSpawn, spawnPosition, Quaternion.identity, container);
-            EnemyMovement enemyMovement = enemy.GetComponent<EnemyMovement>();
-            enemyMovement.Speed = enemiesSpeed;
         }
+    }
+
+    public void SpawnEnemy()
+    {
+        int randomIndex = GetRandomEnemyIndex();
+        GameObject enemyToSpawn = enemyPrefabs[randomIndex];
+
+        Vector3 spawnPosition = GetRandomSpawnPosition();
+
+        GameObject enemy = Instantiate(enemyToSpawn, spawnPosition, Quaternion.identity, container);
+        EnemyMovement enemyMovement = enemy.GetComponent<EnemyMovement>();
+        enemyMovement.Speed = enemiesSpeed;
     }
 
     public void ClearAllEnemies()

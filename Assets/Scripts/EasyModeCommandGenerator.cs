@@ -1,32 +1,42 @@
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class EasyModeCommandGenerator : ICommandGenerator
+public class EasyModeCommandGenerator : MonoBehaviour, ICommandGenerator
 {
+    private List<JsonCommand> commands = new();
 
-    private List<string> _commands = new List<string>()
-{
-    "ls -l",
-    "pwd",
-    "touch file.txt",
-    "rm file.txt",
-    "cp file1.txt file2.txt",
-    "mv file.txt /home/user/",
-    "chmod 755 script.sh",
-    "find /home -name '*.txt'",
-    "cat file.txt",
-    "grep 'pattern' file.txt",
-    "df -h",
-    "du -sh folder/",
-    "ps aux",
-    "netstat -tulnp"
-};
+    private HashSet<int> currentDifficulties = new (new int[] { 0, 1 });
+
+
+    private int lastIndex = -1;
+
+    private void Awake()
+    {
+        GameEvents.OnChangeStage += (stage) => HandleStageChanged(stage);
+        commands = JsonLoader.Instance.Commands;
+        Debug.Log(commands.Count);
+    }
 
     public Command GenerateCommand()
     {
-        return GetCommand(_commands[Random.Range(0, _commands.Count)]);
-       //return GetCommand(_commands[0]);
+        var currentCommands = commands.Where(x => currentDifficulties.Contains(x.difficulty)).ToArray();
+        int index = Random.Range(0, currentCommands.Length);
+        while (index == lastIndex)
+        {
+            index = Random.Range(0, currentCommands.Length);
+        }
+        lastIndex = index;
+        return GetCommand(currentCommands[index].command);
+    }
+
+    private void HandleStageChanged(IStageable stage)
+    {
+        currentDifficulties.Clear();
+        currentDifficulties.AddRange(stage.GetDifficulties());
     }
 
     private Command GetCommand(string str)

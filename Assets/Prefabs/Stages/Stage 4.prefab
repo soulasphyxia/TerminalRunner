@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -3497609281491300274, guid: b4990013614dade4da4c91d4bcf41783, type: 3}
+      propertyPath: _speed
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3497609281491300274, guid: b4990013614dade4da4c91d4bcf41783, type: 3}
       propertyPath: _number
       value: 4
       objectReference: {fileID: 0}
@@ -18,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: -855298285791758126, guid: a7afac0e7d37c6242af72f699b21ead7, type: 3}
     - target: {fileID: -3497609281491300274, guid: b4990013614dade4da4c91d4bcf41783, type: 3}
       propertyPath: _spawnRate
-      value: 1
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -3497609281491300274, guid: b4990013614dade4da4c91d4bcf41783, type: 3}
       propertyPath: IsLastStage

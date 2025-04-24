@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -3497609281491300274, guid: b4990013614dade4da4c91d4bcf41783, type: 3}
       propertyPath: _speed
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -3497609281491300274, guid: b4990013614dade4da4c91d4bcf41783, type: 3}
       propertyPath: _number
@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: -6470460504253458178, guid: 68c7612e0d1ea0345a82bfe26ccc85ee, type: 3}
     - target: {fileID: -3497609281491300274, guid: b4990013614dade4da4c91d4bcf41783, type: 3}
       propertyPath: _spawnRate
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -3497609281491300274, guid: b4990013614dade4da4c91d4bcf41783, type: 3}
       propertyPath: _isLastStage

@@ -12,10 +12,17 @@ public class Command
     private readonly List<CommandWord> words;
     private int currentWordPosition = 0;
     private GameObject deathAnimation;
+    private int difficulty = 1;
 
     public Command(List<CommandWord> words)
     {
         this.words = words;
+    }
+
+    public int Difficulty
+    {
+        get { return difficulty; }
+        set { this.difficulty = value; }
     }
 
     public List<CommandWord> Words

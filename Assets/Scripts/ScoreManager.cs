@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    public int currentScore = 0; // Текущее количество очков
-    public TMP_Text scoreText; // Ссылка на текстовый объект
+    public int currentScore = 0;
+    public TMP_Text scoreText;
 
     void Start()
     {
@@ -14,18 +14,16 @@ public class ScoreManager : MonoBehaviour
         }
         else
         {
-            UpdateScoreText(); // Обновляем текст при старте
+            UpdateScoreText();
         }
     }
 
-    // Метод для увеличения очков
     public void AddScore(int points)
     {
-        currentScore += points; // Увеличиваем очки
-        UpdateScoreText(); // Обновляем текст
+        currentScore += points; 
+        UpdateScoreText();
     }
 
-    // Метод для обновления текста
     private void UpdateScoreText()
     {
         if (scoreText != null)

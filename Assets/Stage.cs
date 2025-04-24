@@ -41,7 +41,7 @@ public class Stage : MonoBehaviour, IStageable
        return _number;
     }
 
-    bool IStageable.IsLastStage()
+    public bool IsLastStage()
     {
         return _isLastStage;
     }
