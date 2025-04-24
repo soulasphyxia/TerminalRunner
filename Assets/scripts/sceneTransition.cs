@@ -10,4 +10,14 @@ public class sceneTransition : MonoBehaviour
         SceneManager.LoadScene(SceneNumber);
     }
 
+    public void QuitApplication()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false; // Stops Play Mode in Editor
+        #else
+            Application.Quit(); // Works in builds (Windows, Mac, Linux, etc.)
+        #endif
+    }
+
+
 }

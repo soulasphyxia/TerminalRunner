@@ -6628,7 +6628,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2551363714135809538, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2551363714135809538, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -6645,14 +6645,14 @@ PrefabInstance:
     - target: {fileID: 2551363714135809538, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2003716243}
     - target: {fileID: 2551363714135809538, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Play
       objectReference: {fileID: 0}
     - target: {fileID: 2551363714135809538, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: 
+      value: QuitApplication
       objectReference: {fileID: 0}
     - target: {fileID: 2551363714135809538, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -6660,7 +6660,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2551363714135809538, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: UnityEngine.AudioSource, UnityEngine
+      value: sceneTransition, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2551363714135809538, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
@@ -6672,7 +6672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2551363714135809538, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: 
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4343540179672578236, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -6680,7 +6680,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5212427162373224661, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_Name
-      value: settings (1)
+      value: quit
       objectReference: {fileID: 0}
     - target: {fileID: 5378279759481372098, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
       propertyPath: m_text
@@ -6706,8 +6706,7 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5184146301202754431, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6722,6 +6721,17 @@ AudioSource:
   m_CorrespondingSourceObject: {fileID: 8921461093240059437, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
   m_PrefabInstance: {fileID: 2003716240}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2003716243 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5184146301202754431, guid: 0da00495b0cb6b240bfd9fa054cd533d, type: 3}
+  m_PrefabInstance: {fileID: 2003716240}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e7f09113aaba57468f14fdec54defbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2036563461
 GameObject:
   m_ObjectHideFlags: 0
