@@ -3,21 +3,25 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
-{ 
+{
     [SerializeField] private EnemySpawner spawner;
     private SpriteRenderer backgroundRenderer;
     [SerializeField] TMP_Text text;
     [SerializeField] private Image fadePanel;
     private bool isFading = false;
 
-    public void Awake()
+    private void Awake()
     {
         GameEvents.OnChangeStage += NextStage;
     }
 
+    private void OnDestroy()
+    {
+        GameEvents.OnChangeStage -= NextStage;
+    }
+
     void Start()
     {
-
         backgroundRenderer = GameObject.FindGameObjectWithTag("Background").GetComponent<SpriteRenderer>();
 
         if (fadePanel != null)
@@ -26,22 +30,16 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    void Update()
+    private void NextStage(IStageable stage)
     {
-
-    }
-
-    private void NextStage(IStageable stage) {
         if (stage.IsLastStage())
         {
             text.text = $"Этап {stage.GetStageNumber() - 1} пройден!\nБесконечный режим!";
             TransitionToStage(stage);
             return;
         }
-        string displayText = $"Этап {stage.GetStageNumber() - 1} пройден!";
-        
-        int currentStage = stage.GetStageNumber();
-        text.text = displayText;
+
+        text.text = $"Этап {stage.GetStageNumber() - 1} пройден!";
         TransitionToStage(stage);
     }
 
@@ -57,14 +55,14 @@ public class StageManager : MonoBehaviour
     private System.Collections.IEnumerator FadeAndChangeStage(IStageable stage)
     {
         isFading = true;
-        StartCoroutine(FadeScreen(1f));
+        yield return StartCoroutine(FadeScreen(1f));
         yield return StartCoroutine(FadeText(1f));
 
-        yield return new WaitForSeconds(1f); 
+        yield return new WaitForSeconds(1f);
 
-       backgroundRenderer.sprite = stage.GetBackground();
+        backgroundRenderer.sprite = stage.GetBackground();
 
-        StartCoroutine(FadeScreen(0f)); 
+        yield return StartCoroutine(FadeScreen(0f));
         yield return StartCoroutine(FadeText(0f));
 
         isFading = false;
@@ -103,5 +101,4 @@ public class StageManager : MonoBehaviour
 
         text.color = new Color(text.color.r, text.color.g, text.color.b, targetAlpha);
     }
-
 }

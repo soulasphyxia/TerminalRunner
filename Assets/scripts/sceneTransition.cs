@@ -1,5 +1,5 @@
-using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine;
 
 public class sceneTransition : MonoBehaviour
 {
@@ -10,4 +10,13 @@ public class sceneTransition : MonoBehaviour
         SceneManager.LoadScene(SceneNumber);
     }
 
+    public void ResetGame()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+
+        DontDestroyCleaner.DestroyAllDontDestroyOnLoad();
+
+        SceneManager.LoadScene("MainScene");
+    }
 }

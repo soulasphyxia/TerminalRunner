@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using TMPro;
-using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,35 +21,46 @@ public class GameManager : MonoBehaviour
     private bool IsEndlessMode = false;
 
     private int enemiesKilled = 0;
-
     private int currentCombo = 1;
-
 
     private void Awake()
     {
-        DontDestroyOnLoad(mainCamera);
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
+
         GameEvents.OnEnemyDestroyed += HandleEnemyDestroyed;
         GameEvents.OnEnemyGetAway += HandleEnemyGotAway;
         GameEvents.GameOver += HandleGameOver;
         GameEvents.AddCombo += HandleAddCombo;
         GameEvents.ResetCombo += HandleResetCombo;
-        audioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
+
         currentStage = stages[0].GetComponent<IStageable>();
         currentStageIndex = 0;
+
+        audioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
     }
 
-    public void Update()
+
+    private void OnDestroy()
+    {
+        GameEvents.OnEnemyDestroyed -= HandleEnemyDestroyed;
+        GameEvents.OnEnemyGetAway -= HandleEnemyGotAway;
+        GameEvents.GameOver -= HandleGameOver;
+        GameEvents.AddCombo -= HandleAddCombo;
+        GameEvents.ResetCombo -= HandleResetCombo;
+    }
+    private void Update()
     {
         ChangeState();
     }
-
 
     private void ChangeState()
     {
         if (enemiesKilled == currentStage.EnemiesToKill() && !IsEndlessMode)
         {
             currentStage = stages[currentStageIndex].GetComponent<IStageable>();
-            Debug.Log($"{currentStage.GetStageNumber()}, {currentStage.IsLastStage()}");
             GameEvents.CallChangeStage(currentStage);
             enemiesKilled = 0;
             currentStageIndex++;
@@ -76,7 +86,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void HandleEnemyGotAway() {
+    public void HandleEnemyGotAway()
+    {
         lifeManager.LoseLife();
     }
 
@@ -89,7 +100,7 @@ public class GameManager : MonoBehaviour
 
     public void HandleAddCombo()
     {
-        currentCombo += 1;
+        currentCombo++;
         UpdateComboText();
     }
 
@@ -101,6 +112,13 @@ public class GameManager : MonoBehaviour
 
     public void HandleGameOver()
     {
+        StopAllCoroutines();
+        GameEvents.OnEnemyDestroyed -= HandleEnemyDestroyed;
+        GameEvents.OnEnemyGetAway -= HandleEnemyGotAway;
+        GameEvents.GameOver -= HandleGameOver;
+        GameEvents.AddCombo -= HandleAddCombo;
+        GameEvents.ResetCombo -= HandleResetCombo;
+        ScoreTransitioner.LastScore = scoreManager.currentScore;
         SceneManager.LoadScene("DeathScene");
     }
 
@@ -108,7 +126,7 @@ public class GameManager : MonoBehaviour
     {
         if (comboText != null)
         {
-            comboText.text = currentCombo.ToString() + "x";
+            comboText.text = currentCombo + "x";
         }
     }
 
@@ -116,21 +134,15 @@ public class GameManager : MonoBehaviour
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-        if (enemies.Length == 0)
-        {
-            Debug.LogWarning("На сцене нет врагов!");
-            return;
-        }
+        if (enemies.Length == 0) return;
 
         Vector3 cameraBottomPosition = mainCamera.ViewportToWorldPoint(new Vector3(0.5f, 0, mainCamera.nearClipPlane));
-
         GameObject nearestEnemy = null;
         float minDistance = Mathf.Infinity;
 
         foreach (GameObject enemy in enemies)
         {
             float distance = Mathf.Abs(enemy.transform.position.y - cameraBottomPosition.y);
-
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -140,21 +152,11 @@ public class GameManager : MonoBehaviour
 
         if (nearestEnemy != null)
         {
-            Vector2 enemyPosition = nearestEnemy.transform.position;
-
-            Destroy(nearestEnemy.gameObject);
-
-            GameObject explosion = null;
-            explosion = Instantiate(defaultExplosionPrefab, (Vector3)enemyPosition, Quaternion.identity);
-            
-            Debug.Log("Уничтожен ближайший враг к нижней границе камеры.");
-            if (explosion != null) {
+            Vector2 pos = nearestEnemy.transform.position;
+            Destroy(nearestEnemy);
+            GameObject explosion = Instantiate(defaultExplosionPrefab, pos, Quaternion.identity);
+            if (explosion != null)
                 Destroy(explosion, 1f);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Не удалось найти ближайшего врага!");
         }
     }
 }

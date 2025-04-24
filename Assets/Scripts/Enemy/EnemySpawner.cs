@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -14,7 +13,6 @@ public class EnemySpawner : MonoBehaviour
 
     private Camera mainCamera;
     private int lastSpawnedEnemyIndex = -1;
-
 
     public float SpawnRate
     {
@@ -48,7 +46,6 @@ public class EnemySpawner : MonoBehaviour
 
     public void Awake()
     {
-        DontDestroyOnLoad(container);
         GameEvents.OnChangeStage += (stage) => HandleStageChanged(stage);
         this.gameObject.SetActive(false);
     }
@@ -57,36 +54,38 @@ public class EnemySpawner : MonoBehaviour
     {
         ClearAllEnemies();
         canSpawn = false;
-        //container.gameObject.SetActive(false);
     }
 
     private void OnEnable()
     {
-        //container.gameObject.SetActive(true);
         canSpawn = true;
         mainCamera = Camera.main;
         enemies.Clear();
         StartCoroutine(Spawner());
     }
 
+    private void OnDestroy()
+    {
+        GameEvents.OnChangeStage -= HandleStageChanged;
+        StopAllCoroutines();
+    }
+
     private void HandleStageChanged(IStageable stage)
     {
+        if (this == null || !this.isActiveAndEnabled) return;
+
         spawnRate = stage.GetSpawnRate();
         enemiesSpeed = stage.GetSpeed();
+
         StartCoroutine(DisableComponentCoroutine(3.5f));
     }
 
-    private System.Collections.IEnumerator DisableComponentCoroutine(float seconds)
+    private IEnumerator DisableComponentCoroutine(float seconds)
     {
-        
-        // Отключаем компонент
         this.enabled = false;
-
-        // Ждем указанное количество секунд
         yield return new WaitForSeconds(seconds);
 
-        // Включаем компонент обратно
-        this.enabled = true;
+        if (this != null) this.enabled = true;
     }
 
     private IEnumerator Spawner()
@@ -115,12 +114,10 @@ public class EnemySpawner : MonoBehaviour
     {
         if (container != null)
         {
-            // Удаляем всех дочерних объектов контейнера
             foreach (Transform child in container)
             {
                 Destroy(child.gameObject);
             }
-
             Debug.Log("Все враги очищены.");
         }
         else
@@ -133,13 +130,11 @@ public class EnemySpawner : MonoBehaviour
     {
         int randomIndex;
 
-        // Генерируем случайный индекс, пока он не будет отличаться от предыдущего
         do
         {
             randomIndex = Random.Range(0, enemyPrefabs.Length);
         } while (randomIndex == lastSpawnedEnemyIndex);
 
-        // Обновляем индекс последнего созданного врага
         lastSpawnedEnemyIndex = randomIndex;
 
         return randomIndex;
@@ -147,17 +142,12 @@ public class EnemySpawner : MonoBehaviour
 
     private Vector3 GetRandomSpawnPosition()
     {
-        // Получаем границы экрана в мировых координатах
         float cameraHeight = mainCamera.orthographicSize;
         float cameraWidth = cameraHeight * mainCamera.aspect;
 
-        // Генерируем случайную позицию по оси X
         float randomX = Random.Range(-cameraWidth, cameraWidth);
-
-        // Позиция по оси Y — верхний край экрана
         float spawnY = cameraHeight;
 
-        // Возвращаем позицию спавна
         return new Vector3(randomX, spawnY, -10);
     }
 }

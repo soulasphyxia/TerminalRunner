@@ -1,4 +1,4 @@
-using TMPro;
+п»їusing TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
@@ -10,7 +10,7 @@ public class ScoreManager : MonoBehaviour
     {
         if (scoreText == null)
         {
-            Debug.LogError("Текстовый объект не назначен!");
+            Debug.LogError("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
         }
         else
         {
@@ -20,7 +20,7 @@ public class ScoreManager : MonoBehaviour
 
     public void AddScore(int points)
     {
-        currentScore += points; 
+        currentScore += points;
         UpdateScoreText();
     }
 

@@ -35,19 +35,18 @@ public class LifeManager : MonoBehaviour
 
     public void LoseLife()
     {
-        GameEvents.CallGameOver();
-        //if (currentLives > 0)
-        //{
-        //    currentLives--;
-        //    if (lives.Length > 0 && lives[currentLives] != null)
-        //    {
-        //        Destroy(lives[currentLives].gameObject);
-        //    }
-        //}
+        if (currentLives > 0)
+        {
+            currentLives--;
+            if (lives.Length > 0 && lives[currentLives] != null)
+            {
+                Destroy(lives[currentLives].gameObject);
+            }
+        }
 
-        //if (currentLives == 0)
-        //{
-        //    GameEvents.CallGameOver();
-        //}
+        if (currentLives == 0)
+        {
+            GameEvents.CallGameOver();
+        }
     }
 }
