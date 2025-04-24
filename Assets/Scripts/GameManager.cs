@@ -1,8 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using NUnit.Framework;
-using NUnit.Framework.Internal.Filters;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,8 +15,6 @@ public class GameManager : MonoBehaviour
 
     public TMP_Text comboText;
 
-    private Queue<IStageable> stagesQueue;
-
     private IStageable currentStage;
     private int currentStageIndex;
 
@@ -34,7 +28,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        GameEvents.OnEnemyDestroyed += (enemy) => HandleEnemyDestroyed(enemy);
+        DontDestroyOnLoad(mainCamera);
+        GameEvents.OnEnemyDestroyed += HandleEnemyDestroyed;
         GameEvents.OnEnemyGetAway += HandleEnemyGotAway;
         GameEvents.GameOver += HandleGameOver;
         GameEvents.AddCombo += HandleAddCombo;
@@ -81,33 +76,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StopGame()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemy in enemies)
-        {
-            Destroy(enemy);
-        }
-        textHandlerManager.gameObject.SetActive(false);
-        enemySpawner.gameObject.SetActive(false);
-        textHandlerManager.OffDisplayText();
-        enemySpawner.CanSpawn = false;
-        foreach (AudioSource source in audioSources)
-        {
-            if (source != null)
-            {
-                source.Stop();
-            }
-        }
-    }
-
     public void HandleEnemyGotAway() {
         lifeManager.LoseLife();
     }
 
-    public void HandleEnemyDestroyed(GameObject explosionEffect)
+    public void HandleEnemyDestroyed()
     {
-        DestroyNearestEnemyToCameraBottom(explosionEffect);
+        DestroyNearestEnemyToCameraBottom();
         scoreManager.AddScore(100 * currentCombo);
         enemiesKilled++;
     }
@@ -126,7 +101,6 @@ public class GameManager : MonoBehaviour
 
     public void HandleGameOver()
     {
-        StopGame();
         SceneManager.LoadScene("DeathScene");
     }
 
@@ -138,7 +112,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void DestroyNearestEnemyToCameraBottom(GameObject explosionEffect)
+    private void DestroyNearestEnemyToCameraBottom()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
@@ -171,15 +145,8 @@ public class GameManager : MonoBehaviour
             Destroy(nearestEnemy.gameObject);
 
             GameObject explosion = null;
-
-            if (explosionEffect != null)
-            {
-                explosion = Instantiate(explosionEffect, (Vector3)enemyPosition, Quaternion.identity);
-            }
-            else if (defaultExplosionPrefab != null)
-            {
-                explosion = Instantiate(defaultExplosionPrefab, (Vector3)enemyPosition, Quaternion.identity);
-            }
+            explosion = Instantiate(defaultExplosionPrefab, (Vector3)enemyPosition, Quaternion.identity);
+            
             Debug.Log("”ничтожен ближайший враг к нижней границе камеры.");
             if (explosion != null) {
                 Destroy(explosion, 1f);

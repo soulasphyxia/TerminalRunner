@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static class GameEvents
 {
-    public static event System.Action<GameObject> OnEnemyDestroyed;
+    public static event System.Action OnEnemyDestroyed;
     public static event System.Action OnEnemyGetAway;
     public static event System.Action GameOver;
     public static event System.Action<IStageable> OnChangeStage;
@@ -10,9 +10,9 @@ public static class GameEvents
     public static event System.Action AddCombo;
     public static event System.Action ResetCombo;
 
-    public static void CallOnEnemyDestroyed(GameObject explosionPrefab)
+    public static void CallOnEnemyDestroyed()
     {
-        OnEnemyDestroyed?.Invoke(explosionPrefab);
+        OnEnemyDestroyed?.Invoke();
     }
 
     public static void CallOnEnemyGetAway() {

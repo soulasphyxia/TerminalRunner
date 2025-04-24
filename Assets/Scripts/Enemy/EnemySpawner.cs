@@ -48,6 +48,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void Awake()
     {
+        DontDestroyOnLoad(container);
         GameEvents.OnChangeStage += (stage) => HandleStageChanged(stage);
         this.gameObject.SetActive(false);
     }
@@ -56,12 +57,12 @@ public class EnemySpawner : MonoBehaviour
     {
         ClearAllEnemies();
         canSpawn = false;
-        container.gameObject.SetActive(false);
+        //container.gameObject.SetActive(false);
     }
 
     private void OnEnable()
     {
-        container.gameObject.SetActive(true);
+        //container.gameObject.SetActive(true);
         canSpawn = true;
         mainCamera = Camera.main;
         enemies.Clear();

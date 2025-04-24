@@ -12,10 +12,6 @@ public class TextHandlerManager : MonoBehaviour
 
     [SerializeField] private EasyModeCommandGenerator commandGenerator;
 
-    private Stage currentStage;
-
-    private int[] currentDifficulties = new int[] { 0, 1 };
-
     public void OnDisplayText()
     {
         displayText.gameObject.SetActive (true);
@@ -24,6 +20,11 @@ public class TextHandlerManager : MonoBehaviour
     public void OffDisplayText()
     {
         displayText.gameObject.SetActive(false);
+    }
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -94,7 +95,7 @@ public class TextHandlerManager : MonoBehaviour
         }
         if (currentCommand.IsCorrect)
         {
-            GameEvents.CallOnEnemyDestroyed(currentCommand.DeathAnimation);
+            GameEvents.CallOnEnemyDestroyed();
             DisplayNewCommand();   
         }
     }
@@ -113,20 +114,18 @@ public class TextHandlerManager : MonoBehaviour
     private void OnDisable()
     {
         GameEvents.OnChangeStage -= (stage) => HandleStageChanged(stage);
-        displayText.gameObject.SetActive(false);
+        //displayText.gameObject.SetActive(false);
     }
 
     private void OnEnable()
     {
         GameEvents.OnChangeStage += (stage) => HandleStageChanged(stage);
-        displayText.gameObject.SetActive(true);
+        //displayText.gameObject.SetActive(true);
     }
 
     private void HandleStageChanged(IStageable stage)
     {
         StartCoroutine(DisableComponentCoroutine(3.5f));
-        this.currentDifficulties = stage.GetDifficulties();
-
     }
 
     private System.Collections.IEnumerator DisableComponentCoroutine(float seconds)
