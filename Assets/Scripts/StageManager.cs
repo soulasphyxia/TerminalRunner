@@ -1,4 +1,4 @@
-using TMPro;
+п»їusing TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,12 +34,12 @@ public class StageManager : MonoBehaviour
     {
         if (stage.IsLastStage())
         {
-            text.text = $"Этап {stage.GetStageNumber() - 1} пройден!\nБесконечный режим!";
+            text.text = $"Р­С‚Р°Рї {stage.GetStageNumber() - 1} РџСЂРѕР№РґРµРЅ!\nР‘РµСЃРєРѕРЅРµС‡РЅС‹Р№ СЂРµР¶РёРј!";
             TransitionToStage(stage);
             return;
         }
 
-        text.text = $"Этап {stage.GetStageNumber() - 1} пройден!";
+        text.text = $"Р­С‚Р°Рї {stage.GetStageNumber() - 1} РџСЂРѕР№РґРµРЅ!";
         TransitionToStage(stage);
     }
 
